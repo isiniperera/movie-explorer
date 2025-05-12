@@ -107,69 +107,101 @@ export default function Home() {
   );
 
   return (
-    <div className={`p-6 min-h-screen transition duration-300 ${darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"}`}>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Welcome, {username}!</h1>
-        <div className="flex items-center gap-4">
-          <Link
-            to="/favorites"
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition flex items-center gap-2"
+    <div className={`min-h-screen transition duration-300 ${darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"}`}>
+      {/* New Attractive Header */}
+      <div className={`relative ${darkMode ? "bg-gray-800" : "bg-gradient-to-r from-blue-600 to-purple-600"} text-white shadow-lg`}>
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            {/* Left side - Welcome message */}
+            <div className="flex-1">
+              <h1 className="text-4xl font-bold mb-2">Welcome, {username}!</h1>
+              <p className="text-lg opacity-90">Discover and explore amazing movies</p>
+            </div>
+
+            {/* Right side - Navigation buttons */}
+            <div className="flex items-center gap-4">
+              <Link
+                to="/favorites"
+                className="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-full transition-all duration-300 flex items-center gap-2 backdrop-blur-sm"
+              >
+                <span className="text-xl">❤️</span>
+                <span>My Favorites</span>
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full transition-all duration-300"
+              >
+                Logout
+              </button>
+              <button
+                onClick={toggleTheme}
+                className={`${
+                  darkMode 
+                    ? "bg-white/10 hover:bg-white/20" 
+                    : "bg-black/10 hover:bg-black/20"
+                } text-white px-4 py-3 rounded-full transition-all duration-300`}
+              >
+                {darkMode ? "☀️ Light" : "🌙 Dark"}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Decorative wave effect */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg
+            className={`w-full h-12 ${darkMode ? "text-gray-900" : "text-gray-100"}`}
+            viewBox="0 0 1440 100"
+            preserveAspectRatio="none"
           >
-            <span>❤️</span>
-            <span>My Favorites</span>
-          </Link>
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
-          >
-            Logout
-          </button>
-          <button
-            onClick={toggleTheme}
-            className="bg-gray-300 dark:bg-gray-700 text-sm px-3 py-1 rounded-full hover:bg-gray-400 dark:hover:bg-gray-600 text-black dark:text-white transition-all duration-300"
-          >
-            {darkMode ? "Light Mode" : "Dark Mode"}
-          </button>
+            <path
+              fill="currentColor"
+              d="M0,50 C150,100 350,0 500,50 C650,100 850,0 1000,50 C1150,100 1350,0 1440,50 L1440,100 L0,100 Z"
+            />
+          </svg>
         </div>
       </div>
 
-      <SearchBar onSearch={(query) => handleSearch(query, 1)} />
+      {/* Main content */}
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <SearchBar onSearch={(query) => handleSearch(query, 1)} />
 
-      {error && (
-        <div className="text-red-500 text-center mb-4">{error}</div>
-      )}
+        {error && (
+          <div className="text-red-500 text-center mb-4">{error}</div>
+        )}
 
-      {movies.length > 0 ? (
-        <>
-          <h2 className="text-xl font-semibold mb-4">Search Results</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {movies.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
-            ))}
+        {movies.length > 0 ? (
+          <>
+            <h2 className="text-2xl font-semibold mb-6">Search Results</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+              {movies.map((movie) => (
+                <MovieCard key={movie.id} movie={movie} />
+              ))}
+            </div>
+            {loading && <p className="text-center mt-4 text-gray-500">Loading more movies...</p>}
+          </>
+        ) : (
+          <>
+            <h2 className="text-2xl font-semibold mb-6">Trending Movies</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+              {trending.map((movie) => (
+                <MovieCard key={movie.id} movie={movie} />
+              ))}
+            </div>
+          </>
+        )}
+
+        {movies.length > 0 && (
+          <div className="mt-6">
+            <button
+              onClick={handleBackToHome}
+              className="bg-gray-300 hover:bg-gray-400 text-black font-semibold px-6 py-3 rounded-full transition-all duration-300"
+            >
+              Back to Trending Movies
+            </button>
           </div>
-          {loading && <p className="text-center mt-4 text-gray-500">Loading more movies...</p>}
-        </>
-      ) : (
-        <>
-          <h2 className="text-xl font-semibold mb-4">Trending Movies</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {trending.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
-            ))}
-          </div>
-        </>
-      )}
-
-      {movies.length > 0 && (
-        <div className="mt-4">
-          <button
-            onClick={handleBackToHome}
-            className="bg-gray-300 hover:bg-gray-400 text-black font-semibold px-4 py-2 rounded"
-          >
-            Back to Trending Movies
-          </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

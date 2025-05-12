@@ -16,8 +16,27 @@ export const MovieProvider = ({ children }) => {
     localStorage.setItem("favorites", JSON.stringify(favorites));
   }, [favorites]);
 
+  const addToFavorites = (movie) => {
+    if (!favorites.some((fav) => fav.id === movie.id)) {
+      setFavorites([...favorites, movie]);
+    }
+  };
+
+  const removeFromFavorites = (movieId) => {
+    setFavorites(favorites.filter((fav) => fav.id !== movieId));
+  };
+
   return (
-    <MovieContext.Provider value={{ query, setQuery, favorites, setFavorites }}>
+    <MovieContext.Provider 
+      value={{ 
+        query, 
+        setQuery, 
+        favorites, 
+        setFavorites,
+        addToFavorites,
+        removeFromFavorites 
+      }}
+    >
       {children}
     </MovieContext.Provider>
   );

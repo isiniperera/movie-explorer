@@ -111,6 +111,13 @@ export default function Home() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Welcome, {username}!</h1>
         <div className="flex items-center gap-4">
+          <Link
+            to="/favorites"
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition flex items-center gap-2"
+          >
+            <span>❤️</span>
+            <span>My Favorites</span>
+          </Link>
           <button
             onClick={handleLogout}
             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
